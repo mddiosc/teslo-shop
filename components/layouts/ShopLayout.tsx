@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Navbar } from "../ui";
+import { Navbar, SideMenu } from "../ui";
 
 interface ShopLayoutProps {
   title: string;
@@ -26,7 +26,7 @@ const ShopLayout: React.FC<ShopLayoutProps> = ({
         <Navbar />
       </nav>
 
-      {/* TODO: sidebar */}
+      <SideMenu />
 
       <main
         style={{
