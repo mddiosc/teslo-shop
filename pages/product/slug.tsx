@@ -2,6 +2,7 @@ import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { ShopLayout } from "../../components/layouts";
 import { ProductSlideshow } from "../../components/products";
+import { ItemCounter } from "../../components/ui";
 import { initialData } from "../../database/products";
 
 const product = initialData.products[0];
@@ -30,7 +31,7 @@ const ProductPage: NextPage<ProductPageProps> = () => {
               <Typography variant="subtitle2" component="h2">
                 Cantidad
               </Typography>
-              {/* ItemCounter */}
+              <ItemCounter />
             </Box>
 
             {/* agregar al carrito*/}
