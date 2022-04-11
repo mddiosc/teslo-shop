@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NextPage } from "next";
-import { CartList } from "../../components/cart";
+import { CartList, OrderSummary } from "../../components/cart";
 import { ShopLayout } from "../../components/layouts";
 
 interface CartPageProps {}
@@ -31,7 +31,7 @@ const CartPage: NextPage<CartPageProps> = () => {
             <CardContent>
               <Typography variant="h2">Orden</Typography>
               <Divider sx={{ my: 1 }} />
-              {/* Order Summary */}
+              <OrderSummary/>
               <Box sx={{ mt: 3 }}>
                 <Button color="secondary" className="circular-btn" fullWidth>
                   Checkout
