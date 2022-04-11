@@ -26,7 +26,6 @@ const productSchema = new Schema(
         values: ["shirts", "pants", "hoodies", "hats"],
         message: "enum validator failed for path `{PATH}` with value `{VALUE}`",
       },
-      required: true,
     },
     gender: {
       type: String,
@@ -34,7 +33,6 @@ const productSchema = new Schema(
         values: ["men", "women", "kid", "unisex"],
         message: "enum validator failed for path `{PATH}` with value `{VALUE}`",
       },
-      required: true,
     },
   },
   {
