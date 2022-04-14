@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -11,11 +12,13 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import { UIContext } from "../../context";
 
 interface NavbarProps {}
 
 const Navbar: React.FC<NavbarProps> = () => {
   const { asPath } = useRouter();
+  const { toogleSideMenu } = useContext(UIContext);
 
   return (
     <AppBar>
@@ -66,10 +69,10 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>
-          </Link>
+          </Link> 
         </NextLink>
 
-        <Button>Menú</Button>
+        <Button onClick={() => toogleSideMenu()}>Menú</Button>
       </Toolbar>
     </AppBar>
   );
