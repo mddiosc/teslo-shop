@@ -1,15 +1,16 @@
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ShopLayout } from "../../components/layouts";
 import { ProductSlideshow, SizeSelector } from "../../components/products";
 import { ItemCounter } from "../../components/ui";
-import { initialData } from "../../database/products";
+import { dbProducts } from "../../database";
+import { IProduct } from "../../interfaces";
 
-const product = initialData.products[0];
+interface ProductPageProps {
+  product: IProduct;
+}
 
-interface ProductPageProps {}
-
-const ProductPage: NextPage<ProductPageProps> = () => {
+const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -32,7 +33,10 @@ const ProductPage: NextPage<ProductPageProps> = () => {
                 Cantidad
               </Typography>
               <ItemCounter />
-              <SizeSelector selectedSize={product.sizes[0]} sizes={product.sizes}/>
+              <SizeSelector
+                selectedSize={product.sizes[0]}
+                sizes={product.sizes}
+              />
             </Box>
 
             {/* agregar al carrito*/}
@@ -52,6 +56,36 @@ const ProductPage: NextPage<ProductPageProps> = () => {
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async (_ctx) => {
+  const slugs = await dbProducts.getAllProducts();
+  return {
+    paths: slugs.map(({ slug }) => ({ params: { slug } })),
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug } = params as { slug: string };
+
+  const product = await dbProducts.getProductBySlug(slug);
+
+  if (!product) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      product,
+    },
+    revalidate: 86400,
+  };
 };
 
 export default ProductPage;
