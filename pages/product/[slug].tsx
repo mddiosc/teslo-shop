@@ -33,6 +33,17 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
     }));
   };
 
+  const onUpdateQuantity = (quantity: number) => {
+    setTempCartProduct((currentProduct) => ({
+      ...currentProduct,
+      quantity,
+    }));
+  };
+
+  const onAddProductToCart = () => {
+    console.log(tempCartProduct);
+  };
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -54,7 +65,11 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               <Typography variant="subtitle2" component="h2">
                 Cantidad
               </Typography>
-              <ItemCounter />
+              <ItemCounter
+                currentValue={tempCartProduct.quantity}
+                maxValue={product.inStock}
+                onUpdateQuantity={onUpdateQuantity}
+              />
               <SizeSelector
                 selectedSize={tempCartProduct.size}
                 sizes={product.sizes}
@@ -63,7 +78,11 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
             </Box>
 
             {product.inStock > 0 ? (
-              <Button color="secondary" className="circular-btn">
+              <Button
+                onClick={tempCartProduct.size && onAddProductToCart}
+                color="secondary"
+                className="circular-btn"
+              >
                 {tempCartProduct.size
                   ? "Agregar al carrito"
                   : "Seleccione una talla"}
