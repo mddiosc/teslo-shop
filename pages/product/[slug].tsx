@@ -1,16 +1,38 @@
-import { Box, Button, Chip, Grid, Typography } from "@mui/material";
+import { useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
+
 import { ShopLayout } from "../../components/layouts";
 import { ProductSlideshow, SizeSelector } from "../../components/products";
 import { ItemCounter } from "../../components/ui";
+
 import { dbProducts } from "../../database";
-import { IProduct } from "../../interfaces";
+import { ICartProduct, IProduct, ISize } from "../../interfaces";
 
 interface ProductPageProps {
   product: IProduct;
 }
 
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1,
+  });
+
+  const onSelectedSize = (size: ISize) => {
+    setTempCartProduct((currentProduct) => ({
+      ...currentProduct,
+      size,
+    }));
+  };
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -34,14 +56,17 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               </Typography>
               <ItemCounter />
               <SizeSelector
-                selectedSize={product.sizes[0]}
+                selectedSize={tempCartProduct.size}
                 sizes={product.sizes}
+                onSelectedSize={onSelectedSize}
               />
             </Box>
 
             {product.inStock > 0 ? (
               <Button color="secondary" className="circular-btn">
-                Agregar al carrito
+                {tempCartProduct.size
+                  ? "Agregar al carrito"
+                  : "Seleccione una talla"}
               </Button>
             ) : (
               <Chip
