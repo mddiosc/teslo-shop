@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
 
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 
@@ -9,12 +10,16 @@ import { ItemCounter } from "../../components/ui";
 
 import { dbProducts } from "../../database";
 import { ICartProduct, IProduct, ISize } from "../../interfaces";
+import { CartContext } from "../../context";
 
 interface ProductPageProps {
   product: IProduct;
 }
 
 const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
+  const { push } = useRouter();
+  const { addProductToCart } = useContext(CartContext);
+
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
     image: product.images[0],
@@ -41,7 +46,9 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
   };
 
   const onAddProductToCart = () => {
-    console.log(tempCartProduct);
+    if (!tempCartProduct.size) return;
+    addProductToCart(tempCartProduct);
+    // push("/cart");
   };
 
   return (
@@ -79,7 +86,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 
             {product.inStock > 0 ? (
               <Button
-                onClick={tempCartProduct.size && onAddProductToCart}
+                onClick={onAddProductToCart}
                 color="secondary"
                 className="circular-btn"
               >
