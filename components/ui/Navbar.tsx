@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -9,16 +9,29 @@ import {
   Button,
   IconButton,
   Badge,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+} from "@mui/icons-material";
 import { UIContext } from "../../context";
 
 interface NavbarProps {}
 
 const Navbar: React.FC<NavbarProps> = () => {
-  const { asPath } = useRouter();
+  const { asPath, push } = useRouter();
   const { toogleSideMenu } = useContext(UIContext);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchVisible, setisSearchVisible] = useState(false);
+
+  const onSearchTerm = () => {
+    if (searchTerm.trim().length === 0) return;
+    push(`/search/${searchTerm}`);
+  };
 
   return (
     <AppBar>
@@ -32,7 +45,12 @@ const Navbar: React.FC<NavbarProps> = () => {
 
         <Box flex={1} />
 
-        <Box sx={{ display: { xs: "none", sm: "block" } }}>
+        <Box
+          sx={{
+            display: isSearchVisible ? "none" : { xs: "none", sm: "block" },
+          }}
+          className="fadeIn"
+        >
           <NextLink href="/category/men" passHref>
             <Link>
               <Button color={asPath === "/category/men" ? "primary" : "info"}>
@@ -58,7 +76,43 @@ const Navbar: React.FC<NavbarProps> = () => {
 
         <Box flex={1} />
 
-        <IconButton>
+        {/* pantallas grandes */}
+
+        {isSearchVisible ? (
+          <Input
+            sx={{
+              display: { xs: "none", sm: "flex" },
+            }}
+            className="fadeIn"
+            autoFocus
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => (e.key === "Enter" ? onSearchTerm() : null)}
+            placeholder="Buscar..."
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={() => setisSearchVisible(false)}>
+                  <ClearOutlined />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        ) : (
+          <IconButton
+            onClick={() => setisSearchVisible(true)}
+            className="fadeIn"
+            sx={{ display: { xs: "none", sm: "flex" } }}
+          >
+            <SearchOutlined />
+          </IconButton>
+        )}
+
+        {/* Pantallas pequeñas */}
+        <IconButton
+          sx={{ display: { xs: "flex", sm: "none" } }}
+          onClick={toogleSideMenu}
+        >
           <SearchOutlined />
         </IconButton>
 
@@ -69,7 +123,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>
-          </Link> 
+          </Link>
         </NextLink>
 
         <Button onClick={() => toogleSideMenu()}>Menú</Button>

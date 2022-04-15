@@ -59,7 +59,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (_ctx) => {
-  const slugs = await dbProducts.getAllProducts();
+  const slugs = await dbProducts.getAllProductsSlugs();
   return {
     paths: slugs.map(({ slug }) => ({ params: { slug } })),
     fallback: "blocking",

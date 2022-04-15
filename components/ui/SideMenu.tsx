@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UIContext } from "../../context";
 import {
   Box,
@@ -32,6 +32,13 @@ interface SideMenuProps {}
 const SideMenu: React.FC<SideMenuProps> = () => {
   const { push } = useRouter();
   const { isMenuOpen, toogleSideMenu } = useContext(UIContext);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const onSearchTerm = () => {
+    if (searchTerm.trim().length === 0) return;
+    navigateTo(`/search/${searchTerm}`);
+  };
+
   const navigateTo = (url: string) => {
     push(url);
     toogleSideMenu();
@@ -48,11 +55,15 @@ const SideMenu: React.FC<SideMenuProps> = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => (e.key === "Enter" ? onSearchTerm() : null)}
               placeholder="Buscar..."
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility">
+                  <IconButton onClick={onSearchTerm}>
                     <SearchOutlined />
                   </IconButton>
                 </InputAdornment>
