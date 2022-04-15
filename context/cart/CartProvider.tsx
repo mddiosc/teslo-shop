@@ -54,6 +54,10 @@ export const CartProvider: React.FC = ({ children }) => {
     }
   };
 
+  const removeCartProduct = (product: ICartProduct) => {
+    dispatch({ type: "Cart - Remove Product in cart", payload: product });
+  };
+
   const updateCartQuantity = (product: ICartProduct) => {
     dispatch({ type: "Cart - Change cart quantity", payload: product });
   };
@@ -66,6 +70,7 @@ export const CartProvider: React.FC = ({ children }) => {
         //Methods
         addProductToCart,
         updateCartQuantity,
+        removeCartProduct,
       }}
     >
       {children}

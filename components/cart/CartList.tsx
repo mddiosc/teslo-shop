@@ -18,7 +18,8 @@ interface CartListProps {
 }
 
 const CartList: React.FC<CartListProps> = ({ editable = false }) => {
-  const { cart, updateCartQuantity } = useContext(CartContext);
+  const { cart, updateCartQuantity, removeCartProduct } =
+    useContext(CartContext);
 
   const onNewCartQuantity = (product: ICartProduct, newQuantity: number) => {
     product.quantity = newQuantity;
@@ -82,7 +83,11 @@ const CartList: React.FC<CartListProps> = ({ editable = false }) => {
             <Typography variant="subtitle1">$ {product.price}</Typography>
 
             {editable && (
-              <Button variant="text" color="secondary">
+              <Button
+                onClick={() => removeCartProduct(product)}
+                variant="text"
+                color="secondary"
+              >
                 Eliminar
               </Button>
             )}
