@@ -8,6 +8,7 @@ import {
   Box,
   Typography,
   Link,
+  Chip,
 } from "@mui/material";
 import { IProduct } from "../../interfaces";
 
@@ -37,6 +38,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <Link>
             <CardActionArea>
+              {product.inStock === 0 && (
+                <Chip
+                  color="primary"
+                  label="No hay disponible"
+                  sx={{
+                    position: "absolute",
+                    zIndex: 99,
+                    top: "10px",
+                    left: "10px",
+                  }}
+                />
+              )}
+
               <CardMedia
                 className="fadeIn"
                 component="img"
