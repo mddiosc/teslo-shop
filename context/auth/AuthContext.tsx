@@ -4,6 +4,8 @@ import { IUser } from "../../interfaces";
 export interface ContextProps {
   isLoggedIn: boolean;
   user?: IUser;
+  //Methods
+  login: (email: string, password: string) => Promise<boolean>;
 }
 
 export const AuthContext = createContext({} as ContextProps);
