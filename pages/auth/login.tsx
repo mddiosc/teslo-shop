@@ -47,11 +47,11 @@ const LoginPage: NextPage<LoginPageProps> = () => {
       setTimeout(() => {
         setShowError(false);
       }, 3000);
-      return
+      return;
     }
 
-    //TODO: navegar a la pantalla en la que el usuario estaba
-    router.replace("/");
+    const destination = router.query.p?.toString() || "/";
+    router.replace(destination);
   };
 
   return (
@@ -117,7 +117,13 @@ const LoginPage: NextPage<LoginPageProps> = () => {
             </Grid>
 
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href="/auth/register" passHref>
+              <NextLink
+                href={{
+                  pathname: "/auth/register",
+                  query: { ...router.query },
+                }}
+                passHref
+              >
                 <Link underline="always">¿No tienes cuenta?</Link>
               </NextLink>
             </Grid>

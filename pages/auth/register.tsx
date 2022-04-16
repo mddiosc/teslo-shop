@@ -15,7 +15,6 @@ import {
 import { AuthLayout } from "../../components/layouts";
 import { useForm } from "react-hook-form";
 import { validations } from "../../utils";
-import { tesloApi } from "../../api";
 import { ErrorOutline } from "@mui/icons-material";
 
 interface RegisterPageProps {}
@@ -35,11 +34,11 @@ const RegisterPage: NextPage<RegisterPageProps> = () => {
     formState: { errors },
   } = useForm<formData>();
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onRegisterUser = async ({ email, password, name }: formData) => {
     setShowError(false);
-    const {hasError, message} = await registerUser(name, email, password);
+    const { hasError, message } = await registerUser(name, email, password);
 
     if (hasError) {
       setShowError(true);
@@ -50,7 +49,8 @@ const RegisterPage: NextPage<RegisterPageProps> = () => {
       return;
     }
 
-    router.replace("/");
+    const destination = router.query.p?.toString() || "/";
+    router.replace(destination);
   };
 
   return (
@@ -130,7 +130,13 @@ const RegisterPage: NextPage<RegisterPageProps> = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href="/auth/login" passHref>
+              <NextLink
+                href={{
+                  pathname: "/auth/login",
+                  query: { ...router.query },
+                }}
+                passHref
+              >
                 <Link underline="always">¿Ya tienes cuenta?</Link>
               </NextLink>
             </Grid>

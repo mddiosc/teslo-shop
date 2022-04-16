@@ -6,6 +6,7 @@ export interface ContextProps {
   user?: IUser;
   //Methods
   login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
   registerUser: (name: string, email: string, password: string) => Promise<{
     hasError: boolean;
     message?: string;

@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useRouter } from "next/router";
 import { AuthContext, UIContext } from "../../context";
 import {
   Box,
@@ -25,13 +26,12 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from "@mui/icons-material";
-import { useRouter } from "next/router";
 
 interface SideMenuProps {}
 
 const SideMenu: React.FC<SideMenuProps> = () => {
-  const { push } = useRouter();
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { push, asPath } = useRouter();
+  const { isLoggedIn, user, logout } = useContext(AuthContext);
   const { isMenuOpen, toogleSideMenu } = useContext(UIContext);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -123,14 +123,17 @@ const SideMenu: React.FC<SideMenuProps> = () => {
           </ListItem>
 
           {!isLoggedIn ? (
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => navigateTo(`/auth/login?p=${asPath}`)}
+            >
               <ListItemIcon>
                 <VpnKeyOutlined />
               </ListItemIcon>
               <ListItemText primary={"Ingresar"} />
             </ListItem>
           ) : (
-            <ListItem button>
+            <ListItem button onClick={logout}>
               <ListItemIcon>
                 <LoginOutlined />
               </ListItemIcon>

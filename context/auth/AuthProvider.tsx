@@ -1,4 +1,5 @@
 import { useReducer, useEffect } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { tesloApi } from "../../api";
@@ -17,6 +18,7 @@ const Auth_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, Auth_INITIAL_STATE);
+  const { reload } = useRouter();
 
   useEffect(() => {
     checkToken();
@@ -46,6 +48,12 @@ export const AuthProvider: React.FC = ({ children }) => {
     } catch (error) {
       return false;
     }
+  };
+
+  const logout = () => {
+    Cookies.remove("token");
+    Cookies.remove("cart");
+    reload();
   };
 
   const registerUser = async (
@@ -86,6 +94,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
         //Methods
         login,
+        logout,
         registerUser,
       }}
     >
