@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { NextPage } from "next";
+import { AuthContext } from "../../context";
 import {
   Box,
   Button,
@@ -25,37 +27,30 @@ type formData = {
 };
 
 const RegisterPage: NextPage<RegisterPageProps> = () => {
+  const router = useRouter();
+  const { registerUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<formData>();
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('')
 
   const onRegisterUser = async ({ email, password, name }: formData) => {
     setShowError(false);
-    try {
-      const { data } = await tesloApi.post("/user/register", {
-        email,
-        password,
-        name,
-      });
-      const { token, user } = data;
-      console.log(
-        "🚀 ~ file: register.tsx ~ line 39 ~ onRegisterUser ~ token, user",
-        { token, user }
-      );
-    } catch (error) {
+    const {hasError, message} = await registerUser(name, email, password);
+
+    if (hasError) {
       setShowError(true);
+      setErrorMessage(message!);
       setTimeout(() => {
         setShowError(false);
       }, 3000);
-
-      console.log(
-        "🚀 ~ file: register.tsx ~ line 34 ~ onRegisterUser ~ error",
-        error
-      );
+      return;
     }
+
+    router.replace("/");
   };
 
   return (
@@ -69,7 +64,7 @@ const RegisterPage: NextPage<RegisterPageProps> = () => {
               </Typography>
               {showError && (
                 <Chip
-                  label="error"
+                  label={errorMessage}
                   color="error"
                   icon={<ErrorOutline />}
                   className="fadeIn"
