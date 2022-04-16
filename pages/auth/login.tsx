@@ -33,6 +33,7 @@ const LoginPage: NextPage<LoginPageProps> = () => {
   const [showError, setShowError] = useState(false);
 
   const onLoginUser = async ({ email, password }: formData) => {
+    setShowError(false);
     try {
       const { data } = await tesloApi.post("/user/login", { email, password });
       const { token, user } = data;
