@@ -1,4 +1,6 @@
-
+import { useContext, useEffect } from "react";
+import { CartContext } from "../../context";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -12,11 +14,21 @@ import { NextPage } from "next";
 import { CartList, OrderSummary } from "../../components/cart";
 import { ShopLayout } from "../../components/layouts";
 
-
 interface CartPageProps {}
 
 const CartPage: NextPage<CartPageProps> = () => {
-  
+  const { isLoaded, cart } = useContext(CartContext);
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && cart.length === 0) {
+      replace("/cart/empty");
+    }
+  }, [cart, isLoaded, replace]);
+
+  if (!isLoaded || cart.length === 0) {
+    return <></>;
+  }
 
   return (
     <ShopLayout

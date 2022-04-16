@@ -4,6 +4,7 @@ import { ICartProduct } from "../../interfaces";
 import { CartContext, cartReducer } from "./";
 
 export interface CartState {
+  isLoaded: boolean;
   cart: ICartProduct[];
   numberOfitems: number;
   subtotal: number;
@@ -12,6 +13,7 @@ export interface CartState {
 }
 
 const CART_INITIAL_STATE: CartState = {
+  isLoaded: false,
   cart: [],
   numberOfitems: 0,
   subtotal: 0,

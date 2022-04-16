@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 import { ICartProduct } from '../../interfaces';
 
-export interface ContextProps {
+export interface CartContextProps {
+  isLoaded: boolean;
   cart: ICartProduct[];
   numberOfitems: number;
   subtotal: number;
@@ -12,4 +13,4 @@ export interface ContextProps {
   removeCartProduct: (product: ICartProduct) => void
 }
 
-export const CartContext = createContext({} as ContextProps);
+export const CartContext = createContext({} as CartContextProps);
