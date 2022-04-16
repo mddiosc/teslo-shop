@@ -18,13 +18,14 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { UIContext } from "../../context";
+import { CartContext, UIContext } from "../../context";
 
 interface NavbarProps {}
 
 const Navbar: React.FC<NavbarProps> = () => {
   const { asPath, push } = useRouter();
   const { toogleSideMenu } = useContext(UIContext);
+  const { numberOfitems } = useContext(CartContext)
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchVisible, setisSearchVisible] = useState(false);
 
@@ -119,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color="secondary">
+              <Badge badgeContent={numberOfitems > 9 ? '+9' : numberOfitems } color="secondary">
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

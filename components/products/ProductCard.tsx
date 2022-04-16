@@ -11,6 +11,7 @@ import {
   Chip,
 } from "@mui/material";
 import { IProduct } from "../../interfaces";
+import { currency } from "../../utils";
 
 interface ProductCardProps {
   product: IProduct;
@@ -67,7 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         className="fadeIn"
       >
         <Typography fontWeight={700}>{product.title}</Typography>
-        <Typography fontWeight={500}>{`$${product.price}`}</Typography>
+        <Typography fontWeight={500}>{currency.format(product.price)}</Typography>
       </Box>
     </Grid>
   );

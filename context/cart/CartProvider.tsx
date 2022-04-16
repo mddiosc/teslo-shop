@@ -5,10 +5,18 @@ import { CartContext, cartReducer } from "./";
 
 export interface CartState {
   cart: ICartProduct[];
+  numberOfitems: number;
+  subtotal: number;
+  taxRate: number;
+  total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
   cart: [],
+  numberOfitems: 0,
+  subtotal: 0,
+  taxRate: 0,
+  total: 0,
 };
 
 export const CartProvider: React.FC = ({ children }) => {
@@ -28,6 +36,28 @@ export const CartProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     Cookie.set("cart", JSON.stringify(state.cart));
+  }, [state.cart]);
+
+  useEffect(() => {
+    const numberOfitems = state.cart.reduce(
+      (prev, current) => current.quantity + prev,
+      0
+    );
+    const subtotal = state.cart.reduce(
+      (prev, current) => current.quantity * current.price + prev,
+      0
+    );
+    const taxRate = subtotal * Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
+    const total = subtotal + taxRate;
+
+    const orderSummary = {
+      numberOfitems,
+      subtotal,
+      taxRate,
+      total,
+    };
+
+    dispatch({ type: "Cart - Update order summary", payload: orderSummary });
   }, [state.cart]);
 
   const addProductToCart = (product: ICartProduct) => {

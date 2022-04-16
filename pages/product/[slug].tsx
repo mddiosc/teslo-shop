@@ -11,6 +11,7 @@ import { ItemCounter } from "../../components/ui";
 import { dbProducts } from "../../database";
 import { ICartProduct, IProduct, ISize } from "../../interfaces";
 import { CartContext } from "../../context";
+import { currency } from "../../utils";
 
 interface ProductPageProps {
   product: IProduct;
@@ -64,7 +65,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               {product.title}
             </Typography>
             <Typography variant="subtitle1" component="h2">
-              {`$${product.price}`}
+              {currency.format(product.price)}
             </Typography>
 
             {/* cantidad */}

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { ItemCounter } from "../ui";
 import { ICartProduct } from "../../interfaces";
+import { currency } from "../../utils";
 
 interface CartListProps {
   editable?: boolean;
@@ -80,7 +81,7 @@ const CartList: React.FC<CartListProps> = ({ editable = false }) => {
             alignItems="center"
             flexDirection="column"
           >
-            <Typography variant="subtitle1">$ {product.price}</Typography>
+            <Typography variant="subtitle1">{currency.format(product.price)}</Typography>
 
             {editable && (
               <Button
