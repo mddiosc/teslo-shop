@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { tesloApi } from "../../api";
@@ -20,9 +21,18 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, Auth_INITIAL_STATE);
   const { reload } = useRouter();
 
+  const { data, status } = useSession();
+
   useEffect(() => {
-    checkToken();
-  }, []);
+    if (status === "authenticated") {
+      console.log("AuthProvider: useEffect: data?.user", { user: data?.user });
+      //TODO: dispatch({ type: "Auth - Login", payload: data?.user as IUser });
+    }
+  }, [data, status]);
+
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
   const checkToken = async () => {
     if (!Cookies.get("token")) return;
