@@ -53,6 +53,15 @@ export const AuthProvider: React.FC = ({ children }) => {
   const logout = () => {
     Cookies.remove("token");
     Cookies.remove("cart");
+    Cookies.remove("firstName");
+    Cookies.remove("lastName");
+    Cookies.remove("address");
+    Cookies.remove("address2");
+    Cookies.remove("city");
+    Cookies.remove("zip");
+    Cookies.remove("country");
+    Cookies.remove("phone");
+
     reload();
   };
 
