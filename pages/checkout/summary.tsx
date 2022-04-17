@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Box,
   Button,
@@ -12,10 +13,23 @@ import { NextPage } from "next";
 import NextLink from "next/link";
 import { CartList, OrderSummary } from "../../components/cart";
 import { ShopLayout } from "../../components/layouts";
+import { CartContext } from "../../context";
+import { countries } from "../../utils";
 
 interface SummaryPageProps {}
 
 const SummaryPage: NextPage<SummaryPageProps> = () => {
+  const { shippingAddress, numberOfitems } = useContext(CartContext);
+
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const getNameCountry = (country: string) => {
+    const countryName = countries.find((c) => c.code === country);
+    return countryName ? countryName.name : country;
+  };
+
   return (
     <ShopLayout
       title="Resumen de Compra"
@@ -31,7 +45,10 @@ const SummaryPage: NextPage<SummaryPageProps> = () => {
         <Grid item xs={12} sm={5}>
           <Card className="summary-card">
             <CardContent>
-              <Typography variant="h2">Resumen (3 productos)</Typography>
+              <Typography variant="h2">
+                Resumen ({numberOfitems}{" "}
+                {numberOfitems >= 1 ? "Productos" : "Producto"})
+              </Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box display="flex" justifyContent="space-between">
@@ -43,11 +60,13 @@ const SummaryPage: NextPage<SummaryPageProps> = () => {
                 </NextLink>
               </Box>
 
-              <Typography>Miguel Ángel de Dios</Typography>
-              <Typography>Calle de la Callecita 3</Typography>
-              <Typography>Palma, 07000</Typography>
-              <Typography>Spain</Typography>
-              <Typography>+34 666000000</Typography>
+              <Typography>{`${shippingAddress?.firstName} ${shippingAddress?.lastName}`}</Typography>
+              <Typography>{`${shippingAddress?.address} ${shippingAddress?.address2}`}</Typography>
+              <Typography>{`${shippingAddress?.city} ${shippingAddress?.zip}`}</Typography>
+              <Typography>
+                {getNameCountry(shippingAddress?.country)}
+              </Typography>
+              <Typography>{shippingAddress?.phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
 
