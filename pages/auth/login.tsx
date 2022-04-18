@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, getProviders } from "next-auth/react";
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
   Chip,
+  Divider,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AuthLayout } from "../../components/layouts";
@@ -34,6 +35,13 @@ const LoginPage: NextPage<LoginPageProps> = () => {
   } = useForm<formData>();
 
   const [showError, setShowError] = useState(false);
+  const [providers, setProviders] = useState<any>({});
+
+  useEffect(() => {
+    getProviders().then((prov) => {
+      setProviders(prov);
+    });
+  }, []);
 
   const onLoginUser = async ({ email, password }: formData) => {
     setShowError(false);
@@ -112,6 +120,36 @@ const LoginPage: NextPage<LoginPageProps> = () => {
               >
                 <Link underline="always">¿No tienes cuenta?</Link>
               </NextLink>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              flexDirection="column"
+              justifyContent="end"
+            >
+              <Divider sx={{ width: "100%", mb: 2 }} />
+              {Object.values(providers).map((provider: any) => {
+                if (provider.id === "credentials") return <div key={provider.id}></div>;
+
+                return (
+                  <Button
+                    key={provider.id}
+                    variant="outlined"
+                    color="primary"
+                    className="circular-btn"
+                    size="large"
+                    fullWidth
+                    sx={{ mb: 1 }}
+                    onClick={() => {
+                      signIn(provider.id);
+                    }}
+                  >
+                    {provider.name}
+                  </Button>
+                );
+              })}
             </Grid>
           </Grid>
         </Box>
