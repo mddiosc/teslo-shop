@@ -1,6 +1,8 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
+import { NextPage, GetServerSideProps } from "next";
 import NextLink from "next/link";
-import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { getSession, signIn } from "next-auth/react";
 import {
   Box,
   Button,
@@ -13,10 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { AuthLayout } from "../../components/layouts";
 import { validations } from "../../utils/";
-import { tesloApi } from "../../api/";
 import { ErrorOutline } from "@mui/icons-material";
-import { AuthContext } from "../../context";
-import { useRouter } from "next/router";
 
 interface LoginPageProps {}
 
@@ -27,7 +26,6 @@ type formData = {
 
 const LoginPage: NextPage<LoginPageProps> = () => {
   const router = useRouter();
-  const { login } = useContext(AuthContext);
 
   const {
     register,
@@ -39,19 +37,7 @@ const LoginPage: NextPage<LoginPageProps> = () => {
 
   const onLoginUser = async ({ email, password }: formData) => {
     setShowError(false);
-
-    const isValidLogin = await login(email, password);
-
-    if (!isValidLogin) {
-      setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 3000);
-      return;
-    }
-
-    const destination = router.query.p?.toString() || "/";
-    router.replace(destination);
+    await signIn("credentials", { email, password });
   };
 
   return (
@@ -132,6 +118,27 @@ const LoginPage: NextPage<LoginPageProps> = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const session = await getSession({ req });
+  const { p = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default LoginPage;
