@@ -20,17 +20,18 @@ const orderSchema = new Schema(
       lastName: { type: String, required: true },
       address: { type: String, required: true },
       address2: { type: String },
-      city: { type: String, required: true },
       zip: { type: String, required: true },
+      city: { type: String, required: true },
       country: { type: String, required: true },
       phone: { type: String, required: true },
     },
-    numberOfitems: { type: Number, required: true },
-    subtotal: { type: Number, required: true },
+
+    numberOfItems: { type: Number, required: true },
+    subTotal: { type: Number, required: true },
     tax: { type: Number, required: true },
     total: { type: Number, required: true },
-    isPaid: { type: Boolean, required: true },
-    paidAt: { type: String, required: true },
+    isPaid: { type: Boolean, required: true, default: false },
+    paidAt: { type: String },
   },
   {
     timestamps: true,
@@ -39,4 +40,5 @@ const orderSchema = new Schema(
 
 const Order: Model<IOrder> =
   mongoose.models.Order || model("Order", orderSchema);
+
 export default Order;

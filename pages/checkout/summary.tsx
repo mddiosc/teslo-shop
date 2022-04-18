@@ -22,13 +22,18 @@ interface SummaryPageProps {}
 
 const SummaryPage: NextPage<SummaryPageProps> = () => {
   const router = useRouter();
-  const { shippingAddress, numberOfitems } = useContext(CartContext);
+  const { shippingAddress, numberOfitems, createOrder } =
+    useContext(CartContext);
 
   useEffect(() => {
     if (!Cookies.get("firstName")) {
       router.push("/checkout/address");
     }
   }, [router]);
+
+  const onCreateOrder = () => {
+    createOrder();
+  };
 
   if (!shippingAddress) {
     return <></>;
@@ -87,7 +92,12 @@ const SummaryPage: NextPage<SummaryPageProps> = () => {
 
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color="secondary" className="circular-btn" fullWidth>
+                <Button
+                  onClick={onCreateOrder}
+                  color="secondary"
+                  className="circular-btn"
+                  fullWidth
+                >
                   Confirmar Orden
                 </Button>
               </Box>
