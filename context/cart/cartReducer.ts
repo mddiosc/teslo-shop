@@ -1,5 +1,5 @@
-import { ICartProduct } from "../../interfaces";
-import { CartState, ShippingAddress } from "./";
+import { ICartProduct, IShippingAddress } from "../../interfaces";
+import { CartState } from "./";
 
 type CartActionType =
   | {
@@ -8,11 +8,11 @@ type CartActionType =
     }
   | {
       type: "Cart - LoadAdress from cookies";
-      payload: ShippingAddress | undefined;
+      payload: IShippingAddress | undefined;
     }
   | {
       type: "Cart - Update Address";
-      payload: ShippingAddress | undefined;
+      payload: IShippingAddress | undefined;
     }
   | {
       type: "Cart - Add Product";
@@ -31,7 +31,7 @@ type CartActionType =
       payload: {
         numberOfitems: number;
         subtotal: number;
-        taxRate: number;
+        tax: number;
         total: number;
       };
     };

@@ -6,7 +6,7 @@ import { currency } from "../../utils";
 interface OrderSummaryProps {}
 
 const OrderSummary: React.FC<OrderSummaryProps> = () => {
-  const { numberOfitems, subtotal, taxRate, total } = useContext(CartContext);
+  const { numberOfitems, subtotal, tax, total } = useContext(CartContext);
   
 
   return (
@@ -29,7 +29,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = () => {
         <Typography>Impuestos ({Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100}%)</Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{currency.format(taxRate)}</Typography>
+        <Typography>{currency.format(tax)}</Typography>
       </Grid>
       <Grid item xs={6} sx={{ mt: 2 }}>
         <Typography variant="subtitle1">Total:</Typography>
