@@ -30,23 +30,21 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   }, [data, status]);
 
-  // useEffect(() => {
-  //   checkToken();
-  // }, []);
 
-  const checkToken = async () => {
-    if (!Cookies.get("token")) return;
 
-    try {
-      const { data } = await tesloApi.get("/user/validate-token");
-      const { token, user } = data;
-      Cookies.set("token", token);
-      dispatch({ type: "Auth - Login", payload: user });
-    } catch (error) {
-      Cookies.remove("token");
-      dispatch({ type: "Auth - Logout" });
-    }
-  };
+  // const checkToken = async () => {
+  //   if (!Cookies.get("token")) return;
+
+  //   try {
+  //     const { data } = await tesloApi.get("/user/validate-token");
+  //     const { token, user } = data;
+  //     Cookies.set("token", token);
+  //     dispatch({ type: "Auth - Login", payload: user });
+  //   } catch (error) {
+  //     Cookies.remove("token");
+  //     dispatch({ type: "Auth - Logout" });
+  //   }
+  // };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
