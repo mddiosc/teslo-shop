@@ -144,6 +144,7 @@ const AddessPage: NextPage<AddessPageProps> = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <TextField
+                key={Cookies.get('country') || countries[0].code}
                 select
                 variant="filled"
                 label="País"

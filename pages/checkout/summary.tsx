@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   Box,
   Button,
@@ -15,11 +15,20 @@ import { CartList, OrderSummary } from "../../components/cart";
 import { ShopLayout } from "../../components/layouts";
 import { CartContext } from "../../context";
 import { countries } from "../../utils";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 interface SummaryPageProps {}
 
 const SummaryPage: NextPage<SummaryPageProps> = () => {
+  const router = useRouter();
   const { shippingAddress, numberOfitems } = useContext(CartContext);
+
+  useEffect(() => {
+    if (!Cookies.get("firstName")) {
+      router.push("/checkout/address");
+    }
+  }, [router]);
 
   if (!shippingAddress) {
     return <></>;
